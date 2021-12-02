@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WebApp_Cubits.Models;
 
 namespace WebApp_Cubits.Controllers
@@ -18,18 +18,15 @@ namespace WebApp_Cubits.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public IActionResult Create(Category category)
+        
+        public IActionResult Edit()
         {
-            var categoryList = new List<Category>();
-
-            categoryList.Add(new Category
-            {
-                Id = 1,
-                Name = category.Name
-            });
-
-            return View("Index");
+            return View();
+        }
+        
+        public IActionResult Delete()
+        {
+            return View();
         }
     }
 }

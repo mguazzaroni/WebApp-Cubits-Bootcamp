@@ -1,24 +1,81 @@
-﻿@model WebApp_Cubits.Models.Product
-<h2>Crear Producto</h2>
+﻿@{ ViewData["Title"] = "Productos"; }
 
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" method="post">
-            <div class="form-group">
-                <label class="col-form-label">Nombre:</label>
-                <input class="form-control" asp-for="Name" />
+    <div class="col-lg-12">
+        <h1>Agregar</h1>
+
+        <form id="productForm">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" name="name" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Descripcion</label>
+                        <input type="text" name="description" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Precio</label>
+                        <input type="text" name="price" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Stock</label>
+                        <input type="text" name="stock" class="form-control" />
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Descripción</label>
-                <input class="form-control" asp-for="Description" />
-            </div>
-            <div class="form-group">
-                <label class="form-label">Precio</label>
-                <input class="form-control" asp-for="Price" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Crear" class="btn btn-primary" />
+            <div class="button-row">
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <a href="/products" class="btn btn-danger">Cancelar</a>
             </div>
         </form>
     </div>
 </div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+            serializeForm = () => {
+            var model = {
+                name: getInputValue("name"),
+                description: getInputValue("description"),
+                price: getInputValue("price"),
+                stock: getInputValue("stock"),
+            };
+
+            return JSON.stringify(model);
+        };
+
+        getInputValue = (input) => {
+            let value = $(`#productForm input[name=${input}]`).val();
+
+            if (isNaN(value)) {
+                return value;
+            }
+
+            return parseFloat(value);
+        };
+
+        saveProduct = () => {
+            $.ajax({
+                method: "POST",
+                url: "/api/products",
+                contentType: "application/json",
+                data: serializeForm(),
+            }).done(() => {
+                redirectToLocation("/products");
+            })
+        };
+
+        handleSubmit = () => {
+            $("#productForm").on("submit", (event) => {
+                event.preventDefault();
+                saveProduct();
+            });
+        }
+
+        $(document).ready(() => {
+            handleSubmit();
+        });</script>
+}

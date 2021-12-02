@@ -21,17 +21,17 @@ namespace WebApp_Cubits.Controllers
         [HttpPost]
         public IActionResult Create(Provider provider)
         {
-            var providerList = new List<Provider>();
+            //var providerList = new List<Provider>();
 
-            providerList.Add(new Provider
-            {
-                Id = 0,
-                Name = provider.Name,
-                Description = provider.Description,
-                Address = provider.Address
-            });
+            //providerList.Add(new Provider
+            //{
+            //    Id = 0,
+            //    Name = provider.Name,
+            //    Description = provider.Description,
+            //    Address = provider.Address
+            //});
 
-            return View("Index", providerList);
+            return View("Index");
         }
         [HttpGet]
         public IActionResult Edit()

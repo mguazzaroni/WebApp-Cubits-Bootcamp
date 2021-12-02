@@ -3,19 +3,27 @@
 <div class="row">
     <div class="col-lg-12">
         <h2>Lista de Categorias</h2>
+        
+        <a asp-controller="Categories" asp-action="Create" class="btn btn-primary">Crear</a>
+
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Id</th>
                     <th>Nombre</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <th>@item.Id</th>
-                        <th>@item.Name</th>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>
+                            <a asp-controller="Categories" asp-action="Edit" asp-route-id="@item.Id">Editar</a> -
+                            <a asp-controller="Categories" asp-action="Delete" asp-route-id="@item.Id">Borrar</a>
+                        </td>
                     </tr>
                 }
             </tbody>

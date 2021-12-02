@@ -3,18 +3,18 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" method="post">
+        <form asp-controller="Provider" asp-action="Edit" method="post">
             <div class="form-group">
                 <label class="col-form-label">Nombre:</label>
-                <input class="form-control" asp-for="Name" />
+                <input class="form-control" asp-for="Name" type="text" />
             </div>
             <div class="form-group">
-                <label class="col-form-label">Nombre:</label>
-                <input class="form-control" asp-for="Description" />
+                <label class="col-form-label">Descripcion:</label>
+                <input class="form-control" asp-for="Description"  type="text"/>
             </div>
             <div class="form-group">
-                <label class="col-form-label">Nombre:</label>
-                <input class="form-control" asp-for="Address" />
+                <label class="col-form-label">Direccion:</label>
+                <input class="form-control" asp-for="Address" type="text"/>
             </div>
             <div class="form-group">
                 <input type="submit" value="Crear" class="btn btn-primary" />
