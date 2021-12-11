@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApp_Cubits.Data;
+using WebApp_Cubits.Data.Models;
 using WebApp_Cubits.Models;
 
 namespace WebApp_Cubits.Controllers.Api
@@ -12,19 +14,21 @@ namespace WebApp_Cubits.Controllers.Api
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private const string CacheKey = "ProductList";
-        private readonly IMemoryCache _cache;
+        private readonly ApplicationDbContext _context;
 
-        public ProductsController(IMemoryCache cache)
+        public ProductsController(ApplicationDbContext context)
         {
-            _cache = cache;
+            _context = context;
         }
 
         [HttpGet]
         [Route("")]
         public IActionResult GetList()
         {
-            var productList = _cache.Get<List<ProductViewModel>>(CacheKey) ?? new List<ProductViewModel>();
+            var productList = _context
+                .Set<Product>()
+                .ToList();
+
             return Ok(productList);
         }
 
@@ -34,49 +38,61 @@ namespace WebApp_Cubits.Controllers.Api
         [Route("{id}")]
         public IActionResult Get(Guid id)
         {
-            var productList = _cache.Get<List<ProductViewModel>>(CacheKey) ?? new List<ProductViewModel>();
-            var product = productList.Where(p => p.Id == id).FirstOrDefault();
+            var product = _context
+                .Set<Product>()
+                .Where(p => p.Id == id)
+                .FirstOrDefault();
 
-            return Ok(product);
+            var response = new Product
+            {
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Stock = product.Stock
+            };
+
+            return Ok(response);
         }
 
         // POST api/<ProductsController>
         [HttpPost]
         [Route("")]
-        public IActionResult Create([FromBody] ProductViewModel model)
+        public IActionResult Post([FromBody] ProductViewModel model)
         {
-            var productList = _cache.Get<List<ProductViewModel>>(CacheKey) ?? new List<ProductViewModel>();
+            var product = new Product
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Price = model.Price,
+                Stock = model.Stock
+            };
 
-            model.Id = Guid.NewGuid();
-
-            productList.Add(model);
-
-            _cache.Set(CacheKey, productList);
+            _context.Add(product);
+            _context.SaveChanges();
 
             return CreatedAtAction(nameof(Get), new { id = model.Id }, new { id = model.Id });
         }
 
         // PUT api/<ProductsController>/5
         [HttpPut("{id}")]
-        public IActionResult Edit(Guid id, [FromBody] ProductViewModel model)
+        public IActionResult Put(Guid id, [FromBody] ProductViewModel model)
         {
-            var productList = _cache.Get<List<ProductViewModel>>(CacheKey) ?? new List<ProductViewModel>();
-            var product = productList.Where(p => p.Id == id).FirstOrDefault();
+            var product = _context
+                 .Set<Product>()
+                 .Where(p => p.Id == id)
+                 .FirstOrDefault();
 
-            if (product == null) 
+            if (product == null)
                 return NotFound();
-
-            productList.Remove(model);
 
             product.Name = model.Name;
             product.Description = model.Description;
             product.Price = model.Price;
             product.Stock = model.Stock;
 
-            productList.Add(product);
-
-            _cache.Set(CacheKey, productList);
-
+            _context.Add(product);
+            _context.SaveChanges();
+                
             return Ok();
         }
 
@@ -84,17 +100,19 @@ namespace WebApp_Cubits.Controllers.Api
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
-            var productList = _cache.Get<List<ProductViewModel>>(CacheKey) ?? new List<ProductViewModel>();
-            var product = productList.Where(p => p.Id == id).FirstOrDefault();
+            var product = _context
+                 .Set<Product>()
+                 .Where(p => p.Id == id)
+                 .FirstOrDefault();
 
             if (product == null)
                 return NotFound();
 
-            productList.Remove(product);
+            _context.Remove(product);
+            _context.SaveChanges();
 
-            _cache.Set(CacheKey, productList);
 
-            return Ok(product);
+            return Ok();
         }
     }
 }

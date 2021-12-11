@@ -1,24 +1,57 @@
 ﻿@model WebApp_Cubits.Models.Provider
-<h2>Crear Proveedor</h2>
-
-<div class="row">
+    @*<style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>*@
+<div class="row" v-scope v-cloak>
     <div class="col-md-4">
-        <form asp-action="Create" method="post">
+        <h2>Crear Proveedor</h2>
+
+        <form v-on:submit.prevent="submitForm">
             <div class="form-group">
                 <label class="col-form-label">Nombre</label>
-                <input class="form-control" asp-for="Name" />
+                <input class="form-control" v-model="name" type="text" />
             </div>
             <div class="form-group">
-                <label class="col-form-label">Nombre</label>
-                <input class="form-control" asp-for="Description" />
+                <label class="col-form-label">Descripcion</label>
+                <input class="form-control" v-model="description" type="text" />
             </div>
             <div class="form-group">
-                <label class="col-form-label">Nombre</label>
-                <input class="form-control" asp-for="Address" />
+                <label class="col-form-label">Direccion</label>
+                <input class="form-control" v-model="address" type="text" />
             </div>
-            <div class="form-group">
-                <input type="submit" value="Crear" class="btn btn-primary" />
+            <div class="button-row">
+                <button type="submit" class="btn btn-success">Guardar</button>
             </div>
         </form>
     </div>
+    
 </div>
+
+@section Scripts 
+{
+    <script src="/lib/axios/axios.js"></script>
+    <script src="/lib/petite-vue/petite-vue.js"></script>
+
+    <script type="text/javascript">
+        const app = {
+            name: null,
+            description: null,
+            address: null,
+            get data() {
+                return {
+                    model: this.model,
+                    description = this.description,
+                    address: this.address
+                };
+            },
+            async submitForm() {
+                await axios.post('api/providers', this.data);
+                redirectToLocation('api/prividers');
+            }
+        };
+
+        PetiteVue.createApp(app).mount();
+    </script>
+ }

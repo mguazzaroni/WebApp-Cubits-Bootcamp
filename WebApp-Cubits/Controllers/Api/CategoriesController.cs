@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApp_Cubits.Data;
 using WebApp_Cubits.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,18 +15,19 @@ namespace WebApp_Cubits.Controllers.Api
     [Route("api/[controller]")]
     public class CategoriesController : ControllerBase
     {
-        private readonly IMemoryCache _cache;
-        private readonly string CacheKey = "Category";
+        private readonly ApplicationDbContext _dbContext;
 
-        public CategoriesController(IMemoryCache cache)
+        public CategoriesController(ApplicationDbContext dbContext)
         {
-            _cache = cache;
+            _dbContext = dbContext;
         }
         // GET: api/<CategoriesController>
         [HttpGet]
         public IActionResult GetList()
         {
-            var categoryList = _cache.Get<List<Category>>(CacheKey) ?? new List<Category>();
+            var categoryList = _dbContext
+                .Set<Category>()
+                .ToList();
 
             return Ok(categoryList);
         }
@@ -34,8 +36,19 @@ namespace WebApp_Cubits.Controllers.Api
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
         {
-            var categoryList = _cache.Get<List<Category>>(CacheKey) ?? new List<Category>();
-            var category = categoryList.Where(c => c.Id == id);
+            var category = _dbContext
+                .Set<Category>()
+                .Where(c => c.Id == id)
+                .FirstOrDefault();
+
+            if (category == null)
+                return NotFound();
+
+            var response = new Category
+            {
+                Id = category.Id,
+                Name = category.Name
+            };
 
             return Ok(category);
         }
@@ -43,36 +56,35 @@ namespace WebApp_Cubits.Controllers.Api
         // POST api/<CategoriesController>
         [HttpPost]
         [Route("")]
-        public IActionResult Create([FromBody] Category model)
+        public IActionResult Post([FromBody] Category model)
         {
-            model.Id = Guid.NewGuid();
+            var category = new Category
+            {
+                Name = model.Name
+            };
 
-            var categoryList = _cache.Get<List<Category>>(CacheKey) ?? new List<Category>();
+            _dbContext.Add(category);
+            _dbContext.SaveChanges();
 
-            categoryList.Add(model);
-
-            _cache.Set(CacheKey, categoryList);
-
-            return CreatedAtAction(nameof(Get), new { id = model.Id }, new { id = model.Id });
+            return CreatedAtAction(nameof(Get), new { id = category.Id }, new { id = category.Id });
         }
 
         // PUT api/<CategoriesController>/5
         [HttpPut("{id}")]
-        public IActionResult Update(Guid id, [FromBody] Category model)
+        public IActionResult Put(Guid id, [FromBody] Category model)
         {
-            var categoryList = _cache.Get<List<Category>>(CacheKey) ?? new List<Category>();
-
-            var category = categoryList
-                .Where(x => x.Id == model.Id)
+            var category = _dbContext
+                .Set<Category>()
+                .Where(p => p.Id == id)
                 .FirstOrDefault();
-            //Remuevo
-            categoryList.Remove(category);
-            //Edito
+
+            if (category == null)
+                return NotFound();
+
             category.Name = model.Name;
-            //Agrego
-            categoryList.Add(category);
-            //Guardo
-            _cache.Set(CacheKey, categoryList);
+
+            _dbContext.Update(category);
+            _dbContext.SaveChanges();
 
             return Ok();
         }
@@ -81,17 +93,18 @@ namespace WebApp_Cubits.Controllers.Api
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid? id)
         {
-            var categoryList = _cache.Get<List<Category>>(CacheKey);
-
-            var category = categoryList
-                .Where(x => x.Id == id)
+            var category = _dbContext
+                .Set<Category>()
+                .Where(c => c.Id == id)
                 .FirstOrDefault();
-            //Remuevo
-            categoryList.Remove(category);
 
-            _cache.Set(CacheKey, categoryList);
+            if (category == null)
+                return NotFound();
 
-            return Ok(category);
+            _dbContext.Remove(category);
+            _dbContext.SaveChanges();
+
+            return Ok();
         }
     }
 }

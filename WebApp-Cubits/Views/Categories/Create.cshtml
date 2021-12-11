@@ -1,16 +1,52 @@
 ﻿@model WebApp_Cubits.Models.Category
 <h2>Crear Categoria</h2>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" method="post">
+<form id="categoryForm">
+    <div class="row">
+        <div class="col-lg-6">
             <div class="form-group">
-                <label class="col-form-label">Nombre:</label>
-                <input class="form-control" asp-for="Name" />
+                <label>Nombre</label>
+                <input class="form-control" type="text" name="name" />
             </div>
-                <div class="form-group">
-                <input type="submit" value="Crear" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+    <div class="button-row">
+        <button type="submit" class="btn btn-success">Guardar</button>
+    </div>
+</form>
+    
+@section Scripts
+{
+    <script type="text/javascript">
+        serializeForm = () => {
+            var model = {
+                name: getInputValue("name"),
+            };
+            return JSON.stringify(model);
+        };
+        getInputValue = (input) => {
+            let value = $(`#categoryForm input[name=${input}]`).val();
+
+            return value;
+        }
+        saveCategory = () => {
+            $.ajax({
+                method: "POST",
+                url: "/api/categories",
+                contentType: "application/json",
+                data: serializeForm(),
+            }).done(() => {
+                redirectToLocation("/categories");
+            })
+        };
+        handleSubmit = () => {
+            $("#categoryForm").on("submit", (event) => {
+                event.preventDefault();
+                saveCategory();
+            });
+        }
+        $(document).ready(() => {
+            handleSubmit();
+        })
+    </script>
+}

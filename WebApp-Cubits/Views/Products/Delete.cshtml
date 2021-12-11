@@ -4,8 +4,91 @@
     <h2>Borrar Producto</h2>
     <h3>Esta seguro que desea borrar el producto?</h3>
     <div>
-        <form asp-action="Delete" method="post">
-            <input type="submit" value="Borrar" class="btn btn-danger" />
+        <form id="productForm">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" name="name" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción</label>
+                        <input type="text" name="description" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Precio</label>
+                        <input type="text" name="price" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Stock</label>
+                        <input type="text" name="stock" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="button-row">
+                <button type="submit" class="btn btn-danger">Borrar</button>
+            </div>
         </form>
     </div>
 </div>
+
+@section Scripts{
+
+<script type="text/javascript">
+
+    setInputValue = (input, value) => {
+        $(`#productForm input[name=${input}]`).val(value);
+    };
+
+    setFormValues = (product) => {
+        setInputValue("name", product.name);
+        setInputValue("description", product.description);
+        setInputValue("price", product.price);
+        setInputValue("stock", product.stock);
+    }
+
+    disableForm = () => {
+        $("#productForm input[name=name]").attr("disable", true);
+        $("#productForm input[name=description]").attr("disable", true);
+        $("#productForm input[name=price]").attr("disable", true);
+        $("#productForm input[name=stock]").attr("disable", true);
+    }
+
+    getProduct = () => {
+        const id = getParameterFromUrl("id");
+        const entityUrl = `/api/products/${id}`;
+
+        $.ajax({
+            method: "GET",
+            url: entityUrl
+        }).done((product) => {
+            setFormValues(product);
+            disableForm();
+        })
+    }
+
+    deleteProduct = () => {
+        const id = getParameterFromUrl("id");
+        const entityUrl = `/api/products/${id}`;
+
+        $.ajax({
+            method: "DELETE",
+            url: entityUrl
+        }).done(() => {
+            redirectToLocation("/products");
+        })
+    };
+
+    handleSubmit = () => {
+        $("#productForm").on("submit", (event) => {
+            event.preventDefault();
+            deleteProduct();
+        });
+    }
+
+    $(document).ready(() => {
+        getProduct();
+        handleSubmit();
+    });
+</script>
+}

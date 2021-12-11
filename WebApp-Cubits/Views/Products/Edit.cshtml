@@ -30,8 +30,11 @@
 </div>
 @section Scripts
 {
-    <script type="text/javascript">serializeForm = () => {
-            return JSON.stringify({
+    <script type="text/javascript">
+
+        serializeForm = () => {
+            return JSON.stringify(
+            {
                 name: getInputValue("name"),
                 description: getInputValue("description"),
                 price: getInputValue("price"),
