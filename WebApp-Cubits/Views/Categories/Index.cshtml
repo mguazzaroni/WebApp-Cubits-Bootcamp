@@ -1,9 +1,10 @@
-﻿@model List<Category>
-
+﻿@{ 
+    ViewData["Title"] = "Lista de Categorías"; 
+}
 <div class="row">
     <div class="col-lg-12">
-        <h2>Lista de Categorias</h2>
-        
+        <h2>Lista de Categorías</h2>
+
         <a href="/categories/create" class="btn btn-primary">Crear</a>
 
         <table class="table table-bordered">
@@ -14,38 +15,41 @@
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody id="tableBody">
-                
-            </tbody>
+            <tbody id="tableBody"></tbody>
         </table>
     </div>
 </div>
 
-<script type="text/javascript">
-    getList = () => {
-        $.ajax({
-            method: "GET",
-            url: "/api/categories",
-        }).done((categoryList) => {
-            $.each(categoryList, (index, category) => {
-                addRow(category);
+@section Scripts
+{
+    <script type="text/javascript">
+
+        getList = () => {
+            $.ajax({
+                method: "GET",
+                url: "/api/categories",
+            }).done((categoryList) => {
+                $.each(categoryList, (index, category) => {
+                    addRow(category);
+                })
             })
+        }
+        addRow = (category) => {
+            const row = `
+                    <tr>
+                        <td>${category.id}</td>
+                        <td>${category.name}</td>
+                        <td>
+                            <a href='/categories/update?id=${category.id}'>Actualizar</a> -
+                            <a href='/categories/delete?id=${category.id}'>Eliminar</a>
+                        </td>
+                    </tr>
+                `;
+
+            $("#tableBody").append(row);
+        }
+        $(document).ready(() => {
+            getList();
         })
-    }
-    addRow = (category) => {
-        const row = `
-                <tr>
-                    <td>${category.id}</td>
-                    <td>${category.name}</td>
-                    <td>
-                       <a href='/products/update?id=${category.id}'>Actualizar</a> -
-                        <a href='/products/delete?id=${category.id}'>Eliminar</a>
-                    </td>
-                </tr>
-            `
-        $("#tableBody").append(row);
-    }
-    $(document).ready(() => {
-        getList();
-    })
-</script>
+    </script>
+}

@@ -1,12 +1,77 @@
-﻿@model WebApp_Cubits.Models.Category
+﻿@{ 
+    ViewData["Title"] = "Borrar Categoria"; 
+}
 
-<div>
-    <h2>Borrar Categoría</h2>
-    <h3>Esta seguro que desea borrar la categoria?</h3>
-    <div>
-        <form asp-action="Delete" method="post">
-            <input type="submit"  value="Borrar" class="btn btn-danger" />
+<div class="row">
+    <div class="col-lg-12">
+        <h2>Borrar categoría</h2>
+        <form id="categoryForm">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" name="name" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="button-row">
+                <button type="submit" class="btn btn-danger">Borrar</button>
+                <a href="/categories" class="btn btn-secondary">Cancelar</a>
+            </div>
         </form>
     </div>
 </div>
 
+@section Scripts
+{
+    <script type="text/javascript">
+        setInputValue = (input, value) => {
+            $(`#categoryForm input[name=${input}]`).val(value);
+        };
+
+        setFormValue = (category) => {
+            setInputValue("name", category.name);
+        };
+
+        disableForm = () => {
+            $("#categoryForm input[name=name]").attr("disabled", true);
+        };
+
+        getCategory = () => {
+            const id = getParameterFromUrl("id");
+            const entityUrl = `/api/categories/${id}`;
+
+            $.ajax({
+                method: "GET",
+                url: entityUrl
+            }).done((category) => {
+                setFormValue(category);
+                disableForm();
+            });
+        };
+
+        deleteProduct = () => {
+            const id = getParameterFromUrl("id");
+            const entityUrl = `/api/categories/${id}`;
+
+            $.ajax({
+                method: "DELETE",
+                url: entityUrl
+            }).done((category) => {
+                redirectToLocation("/categories");
+            });
+        };
+
+        handleSubmit = () => {
+            $("#categoryForm").on("submit", (event) => {
+                event.preventDefault();
+                deleteProduct();
+            });
+        };
+
+        $(document).ready(() => {
+            getCategory();
+            handleSubmit();
+        })
+    </script>
+}

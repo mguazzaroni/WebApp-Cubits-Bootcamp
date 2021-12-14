@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApp_Cubits.Data;
+using WebApp_Cubits.Data.Models;
 using WebApp_Cubits.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -23,6 +24,7 @@ namespace WebApp_Cubits.Controllers.Api
         }
         // GET: api/<CategoriesController>
         [HttpGet]
+        [Route("")]
         public IActionResult GetList()
         {
             var categoryList = _dbContext
@@ -33,7 +35,8 @@ namespace WebApp_Cubits.Controllers.Api
         }
 
         // GET api/<CategoriesController>/5
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("{id}")]
         public IActionResult Get(Guid id)
         {
             var category = _dbContext
@@ -44,7 +47,7 @@ namespace WebApp_Cubits.Controllers.Api
             if (category == null)
                 return NotFound();
 
-            var response = new Category
+            var response = new CategoryViewModel
             {
                 Id = category.Id,
                 Name = category.Name
@@ -56,7 +59,7 @@ namespace WebApp_Cubits.Controllers.Api
         // POST api/<CategoriesController>
         [HttpPost]
         [Route("")]
-        public IActionResult Post([FromBody] Category model)
+        public IActionResult Post([FromBody] CategoryViewModel model)
         {
             var category = new Category
             {
@@ -70,8 +73,9 @@ namespace WebApp_Cubits.Controllers.Api
         }
 
         // PUT api/<CategoriesController>/5
-        [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] Category model)
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult Put(Guid id, [FromBody] CategoryViewModel model)
         {
             var category = _dbContext
                 .Set<Category>()
@@ -90,7 +94,8 @@ namespace WebApp_Cubits.Controllers.Api
         }
 
         // DELETE api/<CategoriesController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("{id}")]
         public IActionResult Delete(Guid? id)
         {
             var category = _dbContext

@@ -90,7 +90,7 @@ namespace WebApp_Cubits.Controllers.Api
             product.Price = model.Price;
             product.Stock = model.Stock;
 
-            _context.Add(product);
+            _context.Update(product);
             _context.SaveChanges();
                 
             return Ok();

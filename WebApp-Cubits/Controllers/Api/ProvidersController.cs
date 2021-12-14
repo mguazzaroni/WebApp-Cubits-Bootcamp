@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApp_Cubits.Data;
 using WebApp_Cubits.Data.Models;
+using WebApp_Cubits.Models;
 
 namespace WebApp_Cubits.Controllers.Api
 {
@@ -43,7 +44,7 @@ namespace WebApp_Cubits.Controllers.Api
             if (provider == null)
                 return NotFound();
 
-            var response = new Provider
+            var response = new ProviderViewModel
             {
                 Name = provider.Name,
                 Description = provider.Description,
@@ -54,10 +55,11 @@ namespace WebApp_Cubits.Controllers.Api
         }
         [HttpPost]
         [Route("")]
-        public IActionResult Create([FromBody] Provider model)
+        public IActionResult Create([FromBody] ProviderViewModel model)
         {
             var provider = new Provider
             {
+                Id = Guid.NewGuid(),
                 Name = model.Name,
                 Description = model.Description,
                 Address = model.Address
@@ -70,7 +72,7 @@ namespace WebApp_Cubits.Controllers.Api
         }
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Edit(Guid id, [FromBody] Provider model)
+        public IActionResult Edit(Guid id, [FromBody] ProviderViewModel model)
         {
             var provider = _context
                 .Set<Provider>()

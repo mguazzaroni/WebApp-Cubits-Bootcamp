@@ -1,26 +1,39 @@
-﻿@model WebApp_Cubits.Models.Provider
+﻿@{ 
+    ViewData["Title"] = "Borrar Proveedor";
+}
+<style>
+    [v-cloak]{
+        display: none;
+    }
+</style>
 
-<div>
-    <h2>Borrar Proveedor</h2>
-    <h3>Esta seguro que desea borrar el proveedor?</h3>
-    <form v-on:submit.prevent="submitForm">
-        <div class="form-group">
-            <label class="col-form-label">Nombre</label>
-            <input class="form-control" v-model="name" type="text" disabled />
-        </div>
-        <div class="form-group">
-            <label class="col-form-label">Descripcion</label>
-            <input class="form-control" v-model="description" type="text" disabled />
-        </div>
-        <div class="form-group">
-            <label class="col-form-label">Direccion</label>
-            <input class="form-control" v-model="address" type="text" disabled />
-        </div>
-        <div class="button-row">
-            <button type="submit" class="btn btn-success">Guardar</button>
-        </div>
-    </form>
+<div class="row" v-scope v-cloak v-on:mounted="getProvider">
+    <div class="col-lg-6">
+        <h2>Borrar Proveedor</h2>
+
+        <h3>Esta seguro que desea borrar el proveedor?</h3>
+
+        <form v-on:submit.prevent="submitForm">
+            <div class="form-group">
+                <label class="col-form-label">Nombre</label>
+                <input class="form-control" v-model="name" type="text" disabled />
+            </div>
+            <div class="form-group">
+                <label class="col-form-label">Descripcion</label>
+                <input class="form-control" v-model="description" type="text" disabled />
+            </div>
+            <div class="form-group">
+                <label class="col-form-label">Direccion</label>
+                <input class="form-control" v-model="address" type="text" disabled />
+            </div>
+            <div class="button-row">
+                <button type="submit" class="btn btn-danger">Borrar</button>
+                <a href="/providers" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
 </div>
+
 
 @section Scripts
 {

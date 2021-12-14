@@ -13,45 +13,17 @@ namespace WebApp_Cubits.Controllers
         { 
             return View();
         }
-        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
-        [HttpPost]
-        public IActionResult Create(Provider provider)
-        {
-            //var providerList = new List<Provider>();
-
-            //providerList.Add(new Provider
-            //{
-            //    Id = 0,
-            //    Name = provider.Name,
-            //    Description = provider.Description,
-            //    Address = provider.Address
-            //});
-
-            return View("Index");
-        }
-        [HttpGet]
         public IActionResult Edit()
         {
             return View();
         }
-        [HttpPost]
-        public IActionResult Edit(Provider provider)
-        {
-            return View("Index");
-        }
-        [HttpGet]
         public IActionResult Delete()
         {
             return View();
-        }
-        [HttpPost]
-        public IActionResult Delete(int? id)
-        {
-            return View("Index");
         }
     }
 }
