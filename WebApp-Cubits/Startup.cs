@@ -9,7 +9,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApp_Cubits.Contract;
 using WebApp_Cubits.Data;
+using WebApp_Cubits.Data.Repository;
+using WebApp_Cubits.Logic;
 
 namespace WebApp_Cubits
 {
@@ -27,6 +30,14 @@ namespace WebApp_Cubits
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("Default")));
             services.AddMemoryCache();
             services.AddControllersWithViews();
+
+            services.AddScoped<IProductLogic, ProductLogic>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryLogic, CategoryLogic>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProviderLogic, ProviderLogic>();
+            services.AddScoped<IProviderRepository, ProviderRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +54,7 @@ namespace WebApp_Cubits
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();

@@ -25,7 +25,7 @@ namespace WebApp_Cubits.Controllers.Api
         // GET: api/<CategoriesController>
         [HttpGet]
         [Route("")]
-        public IActionResult GetList()
+        public IActionResult GetList() //Devuelvo toda la lista
         {
             var categoryList = _dbContext
                 .Set<Category>()
@@ -37,7 +37,7 @@ namespace WebApp_Cubits.Controllers.Api
         // GET api/<CategoriesController>/5
         [HttpGet]
         [Route("{id}")]
-        public IActionResult Get(Guid id)
+        public IActionResult Get(Guid id) //Devuelvo una categoria por id
         {
             var category = _dbContext
                 .Set<Category>()
@@ -59,7 +59,7 @@ namespace WebApp_Cubits.Controllers.Api
         // POST api/<CategoriesController>
         [HttpPost]
         [Route("")]
-        public IActionResult Post([FromBody] CategoryViewModel model)
+        public IActionResult Post([FromBody] CategoryViewModel model) //Creo una nueva categoria
         {
             var category = new Category
             {
@@ -75,7 +75,7 @@ namespace WebApp_Cubits.Controllers.Api
         // PUT api/<CategoriesController>/5
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Put(Guid id, [FromBody] CategoryViewModel model)
+        public IActionResult Put(Guid id, [FromBody] CategoryViewModel model) //Edito una categoría
         {
             var category = _dbContext
                 .Set<Category>()

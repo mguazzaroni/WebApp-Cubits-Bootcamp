@@ -61,10 +61,12 @@ namespace WebApp_Cubits.Controllers.Api
         {
             var product = new Product
             {
+                Id = Guid.NewGuid(),
                 Name = model.Name,
                 Description = model.Description,
                 Price = model.Price,
-                Stock = model.Stock
+                Stock = model.Stock,
+                
             };
 
             _context.Add(product);

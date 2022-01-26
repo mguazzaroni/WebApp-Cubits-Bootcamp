@@ -14,6 +14,14 @@ namespace WebApp_Cubits.Data.Mappings
         {
             builder.ToTable("Products");
             builder.HasKey(p => p.Id);
+
+            builder.HasOne(c => c.Category)
+                .WithMany(p => p.ProductList)
+                .HasForeignKey(p => p.CategoryId);
+
+            builder.HasOne(p => p.Provider)
+                .WithMany(p => p.ProductList)
+                .HasForeignKey(p => p.ProviderId);
         }
     }
 }

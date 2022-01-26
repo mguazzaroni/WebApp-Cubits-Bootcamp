@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApp_Cubits.Data.Models
+namespace WebApp_Cubits.Models.Dto
 {
-    public class Provider
+    public class ProviderDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Address { get; set; }
-        public List<Product> ProductList { get; set; }
     }
 }
