@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp-Cubits", "WebApp-Cubits\WebApp-Cubits.csproj", "{A7D278FB-A822-4B0C-AA97-6E891FD51505}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppWcf-Cubits", "AppWcf-Cubits\AppWcf-Cubits.csproj", "{78ED6621-6D78-49A2-A2EC-C2DE0FA5DA65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppWcf-Cubits", "AppWcf-Cubits\WebAppWcf-Cubits.csproj", "{78ED6621-6D78-49A2-A2EC-C2DE0FA5DA65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
